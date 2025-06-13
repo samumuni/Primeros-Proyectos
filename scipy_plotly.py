@@ -38,7 +38,7 @@ for i in range(len(t_eval)):
 fig=go.Figure(
     data=[go.Scatter(x=[0,x[0]],y=[0,y[0]],mode='lines+markers',line=dict(width=4))],
     layout=go.Layout(
-        title="Péndulo Simple (Velocidad Ajustada)",
+        title="Péndulo Simple",
         xaxis=dict(range=[-1.2, 1.2], autorange=False),
         yaxis=dict(range=[-1.2, 0.2], autorange=False, scaleanchor="x", scaleratio=1),
         updatemenus=[dict(
@@ -64,15 +64,14 @@ plt.figure()
 plt.plot(t_eval, theta,'c-' ,label='Ángulo (rad)')
 plt.xlabel('Tiempo (s)')   
 plt.ylabel('Ángulo (rad)')
-plt.legend()
 plt.title('Ángulo del Péndulo Simple')
 plt.grid()
-plt.show()
+
 plt.figure()
 plt.plot(t_eval, omega,'r-' ,label='Frecuencia angular (rad/s)')
 plt.xlabel('Tiempo (s)')   
 plt.ylabel('Frecuencia angular (rad/s)')
-plt.legend()
 plt.title('Frecuencia Angular del Péndulo Simple')
 plt.grid()
+
 plt.show()
