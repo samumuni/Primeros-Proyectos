@@ -37,8 +37,8 @@ def pendulo_doble(t,y):
     return [dtheta1_dt,domega1_dt,dtheta2_dt,domega2_dt]
 
 # Intervalo de tiempo para la simulación
-t_span=(0,30)
-t_eval=np.linspace(t_span[0],t_span[1],750)
+t_span=(0,60)
+t_eval=np.linspace(t_span[0],t_span[1],1000)
 
 # Resolver la ecuación diferencial
 sol=spi.solve_ivp(pendulo_doble,t_span,[theta1_0,omega1_0,theta2_0,omega2_0],t_eval=t_eval,method='RK45',rtol=1e-8,atol=1e-10)
