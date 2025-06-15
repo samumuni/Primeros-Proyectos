@@ -13,31 +13,37 @@ b_2=0.05    # fricción en phi
 theta_0=np.pi/4   # inclinación inicial
 phi_0=0.0           # azimutal inicial
 v_theta0=0.0
-v_phi0=5.0       # inicia girando en torno al eje
+v_phi0=1.0       # inicia girando en torno al eje
 
 def pendulo_3d(t,y):
     theta,v_theta,phi,v_phi=y
     epsilon=1e-6
-    sin_theta_safe=np.maximum(np.abs(np.sin(theta)), epsilon)
+    sin_theta=np.sin(theta)
+    sin_theta_safe=sin_theta if abs(sin_theta)>epsilon else np.sign(sin_theta)*epsilon
     dtheta_dt=v_theta
-    dphi_dt=v_phi   
-    dv_theta_dt=(-g/L)*np.sin(theta)-b_1*v_theta/(m*L**2)+v_phi**2*np.sin(theta)*np.cos(theta)
-    dv_phi_dt=(-2*v_theta*v_phi*np.cos(theta)/sin_theta_safe)-b_2*v_phi/(m*L**2*sin_theta_safe**2)
+    dphi_dt=v_phi
+    dv_theta_dt=(-g/L)*np.sin(theta)-(b_1*v_theta)/(m*L**2)+v_phi**2*np.sin(theta)*np.cos(theta)
+    dv_phi_dt=(-2*v_theta*v_phi*np.cos(theta)/sin_theta_safe)-(b_2*v_phi)/(m*L**2*sin_theta_safe**2)
     return [dtheta_dt,dv_theta_dt,dphi_dt,dv_phi_dt]
+
 
 # Intervalo de tiempo para la simulación
 t_span=(0,60)
-t_eval=np.linspace(t_span[0],t_span[1],750)
+t_eval=np.linspace(t_span[0],t_span[1],100)
 
 print('Iniciando la integración numérica del péndulo 3D...')
 
 # Resolver la ecuación diferencial
-sol=spi.solve_ivp(pendulo_3d,t_span,[theta_0,v_theta0,phi_0,v_phi0],t_eval=t_eval,method='RK45',rtol=1e-8,atol=1e-10)
+sol=spi.solve_ivp(pendulo_3d,t_span,[theta_0, v_theta0, phi_0, v_phi0],t_eval=t_eval,method='RK45',rtol=1e-4,atol=1e-5)
 
 if not sol.success:
     print("Integración fallida:", sol.message)
 else:
     print("Integración completada correctamente.")
+
+print("¿Hay NaNs?",np.any(np.isnan(sol.y)))
+print("¿Hay infs?",np.any(np.isinf(sol.y)))
+print("Tiempo final alcanzado:", sol.t[-1])
 
 # Obtener ángulos y coordenadas cartesianas
 theta=sol.y[0]
