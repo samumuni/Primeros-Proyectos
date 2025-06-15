@@ -17,27 +17,36 @@ v_phi0=5.0       # inicia girando en torno al eje
 
 def pendulo_3d(t,y):
     theta,v_theta,phi,v_phi=y
+    epsilon=1e-6
+    sin_theta_safe=np.maximum(np.abs(np.sin(theta)), epsilon)
     dtheta_dt=v_theta
     dphi_dt=v_phi   
     dv_theta_dt=(-g/L)*np.sin(theta)-b_1*v_theta/(m*L**2)+v_phi**2*np.sin(theta)*np.cos(theta)
-    dv_phi_dt=(-2*v_theta*v_phi*np.cos(theta)/np.sin(theta))-b_2*v_phi/(m*L**2*np.sin(theta)**2)
+    dv_phi_dt=(-2*v_theta*v_phi*np.cos(theta)/sin_theta_safe)-b_2*v_phi/(m*L**2*sin_theta_safe**2)
     return [dtheta_dt,dv_theta_dt,dphi_dt,dv_phi_dt]
 
 # Intervalo de tiempo para la simulación
 t_span=(0,60)
 t_eval=np.linspace(t_span[0],t_span[1],750)
 
+print('Iniciando la integración numérica del péndulo 3D...')
+
 # Resolver la ecuación diferencial
 sol=spi.solve_ivp(pendulo_3d,t_span,[theta_0,v_theta0,phi_0,v_phi0],t_eval=t_eval,method='RK45',rtol=1e-8,atol=1e-10)
+
+if not sol.success:
+    print("Integración fallida:", sol.message)
+else:
+    print("Integración completada correctamente.")
 
 # Obtener ángulos y coordenadas cartesianas
 theta=sol.y[0]
 v_theta=sol.y[1]
 phi=sol.y[2]
 v_phi=sol.y[3]
-x=L*np.sin(phi)*np.cos(theta)
+x=L*np.cos(phi)*np.sin(theta)
 y=L*np.sin(phi)*np.sin(theta)
-z=-L*np.cos(phi)
+z=-L*np.cos(theta)
 
 frames=[]
 for i in range(len(t_eval)):
@@ -50,13 +59,14 @@ for i in range(len(t_eval)):
 fig=go.Figure(data=frames[0].data,layout=go.Layout(
     title='Péndulo 3D',
     scene=dict(
-        xaxis=dict(range=[-L,L],title='X'),
-        yaxis=dict(range=[-L,L],title='Y'),
-        zaxis=dict(range=[-L,L],title='Z')
+        xaxis=dict(range=[-L*1.2,L*1.2],title='X'),
+        yaxis=dict(range=[-L*1.2,L*1.2],title='Y'),
+        zaxis=dict(range=[-L*1.2,L*1.2],title='Z')
     ),
     updatemenus=[dict(type='buttons',buttons=[dict(label='Play',method='animate',
                 args=[None,dict(frame=dict(duration=50,redraw=True),fromcurrent=True)])])]
 ))
+
 fig.frames=frames
 fig.show()
 
