@@ -30,7 +30,7 @@ v=sol.y[1]
 
 frames=[]
 for i in range(len(t_eval)):
-    frame=go.Frame(data=[go.Scatter(x=[x[i]],y=[0],mode='markers')],name=str(i))
+    frame=go.Frame(data=[go.Scatter(x=[x[i]],y=[0],mode='markers',marker=dict(size=15, color='red'))],name=str(i))
     frames.append(frame)
 
 sliders=[{
@@ -49,7 +49,7 @@ sliders=[{
 
 # Figura base
 fig=go.Figure(
-    data=[go.Scatter(x=[x[0]],y=[0],mode='markers')],
+    data=[go.Scatter(x=[x[0]],y=[0],mode='markers',marker=dict(size=15, color='red'))],
     layout=go.Layout(
         title="Resorte Amortiguado",
         xaxis=dict(range=[-1,1],autorange=False),

@@ -8,10 +8,10 @@ g=9.81  # gravedad (m/s^2)
 L1=1.0  # longitud del primer péndulo (m)
 L2=1.0  # longitud del segundo péndulo (m)
 m1=1.0  # masa del primer péndulo (kg)
-m2=1.0  # masa del segundo péndulo (kg)
+m2=2.0  # masa del segundo péndulo (kg)
 b1=0.15  # coeficiente de fricción del primer péndulo (N·s/m)
 b2=0.15  # coeficiente de fricción del segundo péndulo (N·s/m)
-theta1_0=np.pi/2  # ángulo inicial del primer péndulo (rad)
+theta1_0=np.pi/4  # ángulo inicial del primer péndulo (rad)
 theta2_0=np.pi/2  # ángulo inicial del segundo péndulo (rad)
 omega1_0=0.0  # velocidad angular inicial del primer péndulo (rad/s)
 omega2_0=0.0  # velocidad angular inicial del segundo péndulo (rad/s)
@@ -57,14 +57,14 @@ frames=[]
 for i in range(len(t_eval)):
     frame=go.Frame(data=[
         go.Scatter(x=[0,x1[i],x2[i]],y=[0,y1[i],y2[i]],mode='lines+markers',line=dict(width=4),
-                  marker=dict(size=[0,20,20],color='red'))
+                  marker=dict(size=[0,15,15],color='red'))
     ],name=str(i))
     frames.append(frame)
 
 # Figura base
 fig=go.Figure(
     data=[go.Scatter(x=[0,x1[0],x2[0]],y=[0,y1[0],y2[0]],mode='lines+markers',line=dict(width=4),
-                     marker=dict(size=[0,20,20],color='red'))],
+                     marker=dict(size=[0,15,15],color='red'))],
     layout=go.Layout(
         title="Péndulo Doble Amortiguado",
         xaxis=dict(range=[-2,2],autorange=False),
@@ -74,7 +74,7 @@ fig=go.Figure(
             showactive=False,
             buttons=[dict(label="▶ Play", method="animate",
                           args=[None, {
-                              "frame": {"duration": 20, "redraw": True},
+                              "frame": {"duration": 40, "redraw": True},
                               "transition": {"duration": 0},
                               "fromcurrent": True,
                               "mode": "immediate"

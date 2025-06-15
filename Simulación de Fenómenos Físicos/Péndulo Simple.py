@@ -18,7 +18,7 @@ def pendulo(t,y):
 
 # Intervalo de tiempo para la simulación
 t_span=(0,10)
-t_eval=np.linspace(t_span[0],t_span[1],750)
+t_eval=np.linspace(t_span[0],t_span[1],500)
 
 # Resolver la ecuación diferencial
 sol=solve_ivp(pendulo,t_span,[theta0,omega0],t_eval=t_eval)
@@ -31,12 +31,12 @@ y=-L*np.cos(theta)
 
 frames=[]
 for i in range(len(t_eval)):
-    frame=go.Frame(data=[go.Scatter(x=[0,x[i]],y=[0,y[i]],mode='lines+markers',line=dict(width=4))],name=str(i))
+    frame=go.Frame(data=[go.Scatter(x=[0,x[i]],y=[0,y[i]],mode='lines+markers',line=dict(width=4),marker=dict(size=[0,15]))],name=str(i))
     frames.append(frame)
 
 # Figura base
 fig=go.Figure(
-    data=[go.Scatter(x=[0,x[0]],y=[0,y[0]],mode='lines+markers',line=dict(width=4))],
+    data=[go.Scatter(x=[0,x[0]],y=[0,y[0]],mode='lines+markers',line=dict(width=4),marker=dict(size=[0,15]))],
     layout=go.Layout(
         title="Péndulo Simple",
         xaxis=dict(range=[-1.2, 1.2], autorange=False),
