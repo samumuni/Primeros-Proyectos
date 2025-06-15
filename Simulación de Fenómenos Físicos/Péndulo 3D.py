@@ -25,7 +25,7 @@ def pendulo_3d(t,y):
 
 # Intervalo de tiempo para la simulación
 t_span=(0,60)
-t_eval=np.linspace(t_span[0],t_span[1],1000)
+t_eval=np.linspace(t_span[0],t_span[1],750)
 
 # Resolver la ecuación diferencial
 sol=spi.solve_ivp(pendulo_3d,t_span,[theta_0,v_theta0,phi_0,v_phi0],t_eval=t_eval,method='RK45',rtol=1e-8,atol=1e-10)
