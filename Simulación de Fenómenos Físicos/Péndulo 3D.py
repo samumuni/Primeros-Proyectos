@@ -29,7 +29,7 @@ def pendulo_3d(t,y):
 
 # Intervalo de tiempo para la simulación
 t_span=(0,60)
-t_eval=np.linspace(t_span[0],t_span[1],100)
+t_eval=np.linspace(t_span[0],t_span[1],750)
 
 print('Iniciando la integración numérica del péndulo 3D...')
 
