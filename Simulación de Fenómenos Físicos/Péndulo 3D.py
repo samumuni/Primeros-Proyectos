@@ -11,15 +11,18 @@ b_1=0.1  # fricción en theta
 b_2=0.05    # fricción en phi
 
 theta_0=np.pi/4   # inclinación inicial
-phi_0=0.0           # azimutal inicial
-v_theta0=0.0
+phi_0=0.1           # azimutal inicial
+v_theta0=0.1
 v_phi0=1.0       # inicia girando en torno al eje
+
+def sin_clip(x,eps=1e-4):
+    s=np.sin(x)
+    return np.sign(s)*max(abs(s),eps)
+
 
 def pendulo_3d(t,y):
     theta,v_theta,phi,v_phi=y
-    epsilon=1e-6
-    sin_theta=np.sin(theta)
-    sin_theta_safe=sin_theta if abs(sin_theta)>epsilon else np.sign(sin_theta)*epsilon
+    sin_theta_safe=sin_clip(theta)
     dtheta_dt=v_theta
     dphi_dt=v_phi
     dv_theta_dt=(-g/L)*np.sin(theta)-(b_1*v_theta)/(m*L**2)+v_phi**2*np.sin(theta)*np.cos(theta)
@@ -34,12 +37,14 @@ t_eval=np.linspace(t_span[0],t_span[1],750)
 print('Iniciando la integración numérica del péndulo 3D...')
 
 # Resolver la ecuación diferencial
-sol=spi.solve_ivp(pendulo_3d,t_span,[theta_0, v_theta0, phi_0, v_phi0],t_eval=t_eval,method='RK45',rtol=1e-4,atol=1e-5)
+sol=spi.solve_ivp(pendulo_3d,t_span,[theta_0, v_theta0, phi_0, v_phi0],t_eval=t_eval,method='LSODA',rtol=1e-6,atol=1e-8)
+
 
 if not sol.success:
-    print("Integración fallida:", sol.message)
-else:
-    print("Integración completada correctamente.")
+    print("Integración fallida:",sol.message)
+    print("Tiempo alcanzado:",sol.t[-1])
+    print("Últimos valores del estado:",sol.y[:,-1])
+
 
 print("¿Hay NaNs?",np.any(np.isnan(sol.y)))
 print("¿Hay infs?",np.any(np.isinf(sol.y)))
